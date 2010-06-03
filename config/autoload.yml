@@ -1,0 +1,5 @@
+autoload:
+  facebook_php_sdk:
+    name:      facebook_php_sdk
+    path:      %SF_LIB_DIR%/vendor/facebook/php-sdk
+    recursive: on
