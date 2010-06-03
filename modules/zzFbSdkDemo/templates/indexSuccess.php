@@ -94,7 +94,7 @@ document.getElementById('fb-root').appendChild(e);
 </a>
 <?php else: ?>
 <div>
-Using JavaScript &amp; XFBML: <fb:login-button></fb:login-button>
+Using JavaScript &amp; XFBML: <fb:login-button perms="email,user_birthday,status_update,publish_stream"></fb:login-button>
 </div>
 <div>
 Without using JavaScript &amp; XFBML:
@@ -120,6 +120,15 @@ Without using JavaScript &amp; XFBML:
 
 <h3>Naitik</h3>
 <img src="https://graph.facebook.com/naitik/picture">
-<?php //echo $naitik['name']; ?>
+<?php echo $naitik['name']; ?>
+
+<?php
+try {
+      var_dump($facebook->api('/me/friends'));
+} catch (FacebookApiException $e) {
+  echo '<pre>'.$e->getMessage().'</pre>';
+}
+?>
+
 </body>
 </html>

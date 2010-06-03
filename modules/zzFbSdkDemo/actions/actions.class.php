@@ -21,4 +21,9 @@ class zzFbSdkDemoActions extends sfActions
   {
     $this->setLayout(false);
   }
+  
+  public function executeDemo(sfWebRequest $request)
+  {
+
+  }
 }

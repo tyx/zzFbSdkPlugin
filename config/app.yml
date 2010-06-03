@@ -3,3 +3,4 @@ all:
     api_key: c5ad4ea1eb4bfae488f0ad478ca1e131
     api_secret: 5fa14e81d5e14fc58936ad98eac7967b
     api_id: 190635716333
+    fb_connect: true
