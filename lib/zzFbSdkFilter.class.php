@@ -20,11 +20,21 @@ class zzFbSdkFilter extends sfFilter
   public function execute($filterChain)
   {
     if ($this->isFirstCall())
-    {
-      $isActive = sfConfig::get('app_fb_sdk_fb_connect', false);
-      
-      $fbSdk = new zzFbSdk(sfConfig::get('app_fb_sdk_api_id'), sfConfig::get('app_fb_sdk_api_secret'));
+    {    
+      $fbSdk = new zzFbSdk(sfConfig::get('app_fb_sdk_api_id'), sfConfig::get('app_fb_sdk_api_secret'), sfConfig::get('app_fb_sdk_has_guard'));
       $this->getContext()->getUser()->fbSdk = $fbSdk;
+      
+      $isFbConnectActive = sfConfig::get('app_fb_sdk_fb_connect', false);
+
+      if (true === $isFbConnectActive && true === $fbSdk->isFacebookConnected() && true === $fbSdk->hasGuard())
+      {
+        $guardUser = $fbSdk->checkGuardUser();
+        
+        if (null !== $guardUser)
+        {
+          $this->getContext()->getUser()->signIn($guardUser);
+        }
+      }
     }
     
     $filterChain->execute();

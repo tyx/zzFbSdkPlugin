@@ -94,7 +94,7 @@ document.getElementById('fb-root').appendChild(e);
 </a>
 <?php else: ?>
 <div>
-Using JavaScript &amp; XFBML: <fb:login-button perms="email,user_birthday,status_update,publish_stream"></fb:login-button>
+Using JavaScript &amp; XFBML: <fb:login-button perms="email,user_birthday"></fb:login-button>
 </div>
 <div>
 Without using JavaScript &amp; XFBML:

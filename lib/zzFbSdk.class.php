@@ -17,24 +17,74 @@
  */
 class zzFbSdk
 {
-  protected $facebook;
+  protected 
+    $facebook,
+    $hasGuard = false,
+    $guardAdapter = null;
   
-  public function __construct($apiId, $apiSecret, $cookie = true)
+  public function __construct($apiId, $apiSecret, $hasGuard, $cookie = true)
   {
     if (null === $apiId || null === $apiSecret)
     {
       throw new sfException('Cannot initialize facebook connection');
     }
     
+    $this->hasGuard = $hasGuard;
+    
     $this->facebook = new Facebook(array(
       'appId' => $apiId,
       'secret' => $apiSecret,
-      'cookie' => true,
+      'cookie' => $cookie,
     ));
   }
   
-  public function facebook($requestApi)
+  public function facebook($requestApi = null)
   {
-    return $this->facebook->api($requestApi);
+    if (null !== $requestApi)
+    {
+      return $this->facebook->api($requestApi);
+    }
+    
+    return $this->facebook;
+  }
+  
+  public function isFacebookConnected()
+  {
+    $user = null;
+    
+    try
+    {
+      if (null !== $this->facebook->getSession())
+      {
+        $user = $this->facebook->getUser();
+        $me = $this->facebook('/me');
+      }
+    }
+    catch(FacebookApiException $e)
+    {
+      return false;
+    }
+    
+    return null !== $user;
+  }
+  
+  public function hasGuard()
+  {
+    return $this->hasGuard;
+  }
+  
+  public function getGuardAdapter()
+  {
+    if (null === $this->guardAdapter)
+    {
+      $this->guardAdapter = new zzFbSdkGuardAdapter($this->facebook('/me'));
+    }
+    
+    return $this->guardAdapter;
+  }
+  
+  public function checkGuardUser()
+  {
+    return $this->getGuardAdapter()->checkGuardUser();
   }
 }
