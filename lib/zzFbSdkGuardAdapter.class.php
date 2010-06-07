@@ -41,7 +41,7 @@ class zzFbSdkGuardAdapter
 
     if (false === $this->guardUser)
     {
-      if (null !== ($user = $this->checkEmail($this->facebook_data['email'])))
+      if (false !== ($user = $this->checkEmail($this->facebook_data['email'])))
       {
         $this->linkGuardUser($user);
       }
@@ -66,6 +66,7 @@ class zzFbSdkGuardAdapter
     $user->Profile = new SfGuardUserProfile();
     $user->Profile->facebook_uid = $this->facebook_data['id'];
     $this->updateProfile($user->Profile);
+    $this->saveGuardUser($user);
   }
   
   protected function saveGuardUser($user)
@@ -102,9 +103,12 @@ class zzFbSdkGuardAdapter
   
   public function linkGuardUser($user)
   {
-    $user->Profile->facebook_uid = $this->facebook_data['id'];
-    $this->updateProfile($user->Profile);
-    $this->saveGuardUser($user);
+    if (false !== $user && get_class($user) === 'sfGuardUser')
+    {
+      $user->Profile->facebook_uid = $this->facebook_data['id'];
+      $this->updateProfile($user->Profile);
+      $this->saveGuardUser($user);
+    }
   }
   
   public function updateGuardUser()

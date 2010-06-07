@@ -15,7 +15,32 @@
  * @author     Autrement
  * @version    1.0.0
  */
-class zzFacebookUser extends 
+class zzFacebookUser extends sfGuardSecurityUser
 {
-  
+  /**
+   * Signs in the user on the application.
+   *
+   * @param sfGuardUser $user The sfGuardUser id
+   * @param boolean $remember Whether or not to remember the user
+   * @param Doctrine_Connection $con A Doctrine_Connection object
+   */
+  public function signIn($user, $remember = false, $con = null)
+  {
+    if ($this->fbSdk == null)
+    {
+      $this->setAttribute('fb-connect', false);
+    }
+    
+    parent::signIn($user, $remember, $con);
+  }
+
+  /**
+   * Signs out the user.
+   *
+   */
+  public function signOut()
+  {
+    $this->setAttribute('fb-connect', false);
+    parent::signOut();
+  }
 }

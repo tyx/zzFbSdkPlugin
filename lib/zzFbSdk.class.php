@@ -50,7 +50,7 @@ class zzFbSdk
   
   public function isFacebookConnected()
   {
-    $user = null;
+    $me = null;
     
     try
     {
@@ -65,7 +65,7 @@ class zzFbSdk
       return false;
     }
     
-    return null !== $user;
+    return null !== $me;
   }
   
   public function hasGuard()

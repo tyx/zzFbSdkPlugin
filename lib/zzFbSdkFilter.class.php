@@ -19,7 +19,8 @@ class zzFbSdkFilter extends sfFilter
 {
   public function execute($filterChain)
   {
-    if ($this->isFirstCall())
+    // On charge le fb sdk si pas connecté ou si déjà connecté via facebook
+    if ($this->isFirstCall() && ($this->getContext()->getUser()->isAnonymous() || $this->getContext()->getUser()->getAttribute('fb-connect')))
     {    
       $fbSdk = new zzFbSdk(sfConfig::get('app_fb_sdk_api_id'), sfConfig::get('app_fb_sdk_api_secret'), sfConfig::get('app_fb_sdk_has_guard'));
       $this->getContext()->getUser()->fbSdk = $fbSdk;
@@ -33,6 +34,7 @@ class zzFbSdkFilter extends sfFilter
         if (null !== $guardUser)
         {
           $this->getContext()->getUser()->signIn($guardUser);
+          $this->getContext()->getUser()->setAttribute('fb-connect', true);
         }
       }
     }
