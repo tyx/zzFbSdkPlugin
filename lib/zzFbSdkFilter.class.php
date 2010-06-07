@@ -19,22 +19,25 @@ class zzFbSdkFilter extends sfFilter
 {
   public function execute($filterChain)
   {
-    // On charge le fb sdk si pas connecté ou si déjà connecté via facebook
-    if ($this->isFirstCall() && ($this->getContext()->getUser()->isAnonymous() || $this->getContext()->getUser()->getAttribute('fb-connect')))
+    if ($this->isFirstCall())
     {    
       $fbSdk = new zzFbSdk(sfConfig::get('app_fb_sdk_api_id'), sfConfig::get('app_fb_sdk_api_secret'), sfConfig::get('app_fb_sdk_has_guard'));
       $this->getContext()->getUser()->fbSdk = $fbSdk;
-      
-      $isFbConnectActive = sfConfig::get('app_fb_sdk_fb_connect', false);
-
-      if (true === $isFbConnectActive && true === $fbSdk->isFacebookConnected() && true === $fbSdk->hasGuard())
+   
+      // On charge le fb connect si pas connecté ou si déjà connecté via facebook
+      if ($this->getContext()->getUser()->isAnonymous() || $this->getContext()->getUser()->getAttribute('fb-connect'))
       {
-        $guardUser = $fbSdk->checkGuardUser();
-        
-        if (null !== $guardUser)
+        $isFbConnectActive = sfConfig::get('app_fb_sdk_fb_connect', false);
+
+        if (true === $isFbConnectActive && true === $fbSdk->isFacebookConnected() && true === $fbSdk->hasGuard())
         {
-          $this->getContext()->getUser()->signIn($guardUser);
-          $this->getContext()->getUser()->setAttribute('fb-connect', true);
+          $guardUser = $fbSdk->checkGuardUser();
+        
+          if (null !== $guardUser)
+          {
+            $this->getContext()->getUser()->signIn($guardUser);
+            $this->getContext()->getUser()->setAttribute('fb-connect', true);
+          }
         }
       }
     }
