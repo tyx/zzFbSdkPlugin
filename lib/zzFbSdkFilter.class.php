@@ -25,7 +25,7 @@ class zzFbSdkFilter extends sfFilter
       $this->getContext()->getUser()->fbSdk = $fbSdk;
    
       // On charge le fb connect si pas connecté ou si déjà connecté via facebook
-      if ($this->getContext()->getUser()->isAnonymous() || $this->getContext()->getUser()->getAttribute('fb-connect'))
+      if ($this->getContext()->getUser()->isAnonymous())
       {
         $isFbConnectActive = sfConfig::get('app_fb_sdk_fb_connect', false);
 
